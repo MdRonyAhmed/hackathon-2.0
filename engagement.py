@@ -21,6 +21,8 @@ async def main():
 
         #comment
         await page.click('span[data-e2e="comment-icon"]')
+        await sleep(1)
+        await page.type('div[data-e2e="comment-input"]', 'hi')
 
         await sleep(89999)
 if __name__ == '__main__':
