@@ -1,5 +1,6 @@
 import asyncio
 from playwright.async_api import async_playwright
+from playwright_stealth import stealth_async
 from time import sleep
 from db import is_table_exist, execute_query, insert_data
 import re
@@ -7,18 +8,25 @@ import re
 # Number of thread
 CONCURRENT_LIMIT = 2
 
+async def response_intercept(response):
+    print(response.url)
+    if "search/general/full" in response.url:
+        print("/n/nrony----------------------")
+        print(response.json())
+
 async def collect_post_details(context, keyword):
     all_info = []
     page = await context.new_page()
+    page.on("response", response_intercept)
     await page.goto('https://www.tiktok.com/search/video')
     await page.wait_for_load_state('domcontentloaded')
     await page.type('input[type="search"]', keyword)
     await page.click('button[aria-label="Search"]')
     await page.wait_for_load_state('domcontentloaded')
     input("Captcha done?")
-    for i in range(5):
+    for i in range(10):
         await page.mouse.wheel(0, 17000)
-        sleep(3)
+        sleep(2)
 
     video_elements = await page.locator('div[data-e2e="search_video-item-list"] >div').all()
     for element in video_elements:
@@ -107,6 +115,8 @@ async def scrape_tiktok(search_input = []):
         )
         for keyword in search_input:
             videos_details = await collect_post_details(context= context, keyword= keyword)
+            print(videos_details)
+            sleep(99999)
             await save_data("tiktok_post_details", videos_details)
             all_author_details = []
             tasks = [collect_auther_details(context, video_detail["author_username"], all_author_details, semaphore) for video_detail in videos_details]
@@ -130,9 +140,6 @@ async def scrape_tiktok(search_input = []):
             
 
 async def main():
-    keywords_list = ["beautiful destinations", "places to visit", "places to travel", "places that don't feel real", "travel hacks"]
-    await scrape_tiktok(keywords_list)
-
     hashtag_list = ["#traveltok", "#wanderlust", "#backpackingadventures", "#luxurytravel", "#hiddengems", "#solotravel", "#roadtripvibes", "#travelhacks", "#foodietravel", "#sustainabletravel"]
     await scrape_tiktok(hashtag_list)
 

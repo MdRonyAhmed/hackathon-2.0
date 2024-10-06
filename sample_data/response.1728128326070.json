@@ -1,0 +1,27 @@
+{
+    "status_code": 0,
+    "qc": "",
+    "cursor": 108,
+    "has_more": 0,
+    "ad_info": {},
+    "extra": {
+        "now": 1728128325000,
+        "logid": "202410051138434E128DF8700FE6189641",
+        "fatal_item_ids": [],
+        "search_request_id": "",
+        "api_debug_info": null
+    },
+    "log_pb": {
+        "impr_id": "202410051138434E128DF8700FE6189641"
+    },
+    "search_nil_info": {
+        "search_nil_type": "",
+        "is_load_more": "is_load_more",
+        "search_nil_item": "pack_nil",
+        "text_type": 10
+    },
+    "global_doodle_config": {
+        "feedback_survey": null
+    },
+    "backtrace": ""
+}
